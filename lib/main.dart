@@ -13,7 +13,7 @@ class MyApp extends StatefulWidget{
 }
 
 
-class _State extends State<MyApp>{
+class _State extends State<MyApp> with WidgetsBindingObserver {
 
   String _lastPress ='never';
 
@@ -24,6 +24,42 @@ class _State extends State<MyApp>{
       _lastPress = pressedTime.toString();
     });
   }
+  @override
+  void initState() {
+    print('*** init state ***');
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+  @override
+  void dispose() {
+    print('*** desposed***');
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print('*** state = ${state.toString()}');
+
+    switch(state){
+      case AppLifecycleState.inactive:
+        print('*** inactive***');
+        break;
+      case AppLifecycleState.paused:
+        print('*** paused***');
+        break;
+      case AppLifecycleState.resumed:
+        print('*** resumed***');
+        break;
+      case AppLifecycleState.suspending:
+        print('*** suspending***');
+        break;
+    }
+
+  }
+
+
 
   @override
 
@@ -63,5 +99,6 @@ class _State extends State<MyApp>{
 
     );
   }
+
 
 }
